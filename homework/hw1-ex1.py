@@ -29,10 +29,7 @@ def ode_rhs(t, y, Cd):
 
     return [dxdt, dzdt, ax, az] # --> solution [x, z, vx, vz]
 
-def hit_the_ground(t, y, Cd): # same arguments that the ode_rhs function
-    return y[1] # z
-
-def simulate_experiment(Cd, angle, v0, tmax, plot=True, tdata=None, xdata=None, vdata=None):
+def simulate_experiment(Cd, angle, v0, tmax, plot=True):
     """Simulate an experiment.
     
     Arguments:
@@ -41,16 +38,11 @@ def simulate_experiment(Cd, angle, v0, tmax, plot=True, tdata=None, xdata=None, 
         v0: initial speed (m/s)
         tmax: maximum time (s)
         plot: bool, if true, plot simulation results and data
-        tdata: measured impact time (s) [only used for plotting]
-        xdata: measured impact location (m) [only used for plotting]
-        vdata: inferred impect velocity (m/s) [only used for plotting]
     
     Returns:
         tfinal: final time (s)
         xfinal: final x position (m)
         vfinal: final speed (m/s)
-
-    solve_ivp(fun, t_span, y0)
     """
     
     vx0 = v0*math.cos(angle)
@@ -72,8 +64,9 @@ def simulate_experiment(Cd, angle, v0, tmax, plot=True, tdata=None, xdata=None, 
 
     if plot == True:
         plt.plot(results.y[0,:], results.y[1,:])
-        plt.ylabel('z')
-        plt.xlabel('x')
+        plt.ylabel('z[m]', fontsize = 12)
+        plt.xlabel('x[m]', fontsize = 12)
+        plt.title('Cannonball trajectory', fontsize = 14)
         plt.show()
 
     return results
