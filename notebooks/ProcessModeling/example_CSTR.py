@@ -266,10 +266,10 @@ def _(np, params):
             cAf = params['cAf']
             Tf = params['Tf']
             Tc = Ti
-        
+
             def k(T):
                 return k0 * np.exp(-Ea / (R * T))
-        
+
             cA, T = y
             dcAdt = (q / V) * (cAf - cA) - k(T) * cA
             dTdt = (
@@ -277,7 +277,7 @@ def _(np, params):
                 + (-deltaH / rho / Cp) * k(T) * cA
                 + (UA / V / rho / Cp) * (Tc - T)
             )
-    
+
             return [dcAdt, dTdt]
 
         y_default = [0.9,310]
@@ -289,8 +289,8 @@ def _(np, params):
 
         else:
             y0 = y_default.copy()
-        
-    
+
+
         solu = optimize.root(eq, y0, args=(params,Ti))
 
         if not solu.success:
@@ -300,7 +300,7 @@ def _(np, params):
             solu = optimize.root(eq, y_fail,args=(params,Ti))
             if not solu.success:
                 print("Failed to converge at Tc = ", Ti," with failsafe initial guess")
-            
+
         ca_array[i] = solu.x[0]
         T_array[i] = solu.x[1]
     return T_array, Tc, ca_array, eq, optimize, y0
@@ -343,6 +343,45 @@ def _(eq, optimize, params):
     sln = optimize.root(eq, [0.5, 350.], args=(params,305))
     print("cA = ", round(sln.x[0],2), "mol/L")
     print("T = ", round(sln.x[1],2), "K")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### Stability analysis
+    """)
+    return
+
+
+@app.function
+def Jacobian(f,x,delta=1.0e-7):
+    '''Approximate Jacobian using forward finite difference
+
+    Args:
+        f: vector-valued function
+        x: point to build approximation J(x) around
+        delta: finite difference step size
+
+    Returns:
+        J: square Jacobian matrix (approximation)
+
+    Reference: CBE 20258, Notre Dame
+
+    '''
+    # Determine size
+    N = x.size
+
+    # Evaluate function f at x
+
+
+@app.cell
+def _():
+    return
+
+
+@app.cell
+def _():
     return
 
 

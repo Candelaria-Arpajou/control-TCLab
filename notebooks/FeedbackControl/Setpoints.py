@@ -8,7 +8,7 @@ app = marimo.App(width="medium")
 def _():
     import marimo as mo
 
-    return
+    return (mo,)
 
 
 @app.cell
@@ -40,7 +40,7 @@ def _():
                 va="center", arrowprops=dict(facecolor='black', shrink=0.05))
     ax.annotate("Soak/Dwell", xy=(210, 50), xytext=(210, 55), fontsize=12, 
                 ha="center", arrowprops=dict(facecolor='black', shrink=0.05))
-    return np, pd, sp_profile
+    return np, pd, plt, sp_profile
 
 
 @app.cell
@@ -61,11 +61,83 @@ def _(np, sp_profile):
         return np.interp(t,t_interp,y_interp)
 
     sp(500)
+    return (sp,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### Example of setpoint function
+    """)
     return
 
 
 @app.cell
-def _():
+def _(sp_profile):
+    sp_profile
+    return
+
+
+@app.cell
+def _(np, sp_profile):
+    def create_setpoint_function(profile):
+        profile = np.array(profile)
+        t_interp = profile[:,0]
+        y_interp = profile[:,1]
+
+        def setpoint_function(t):
+            return np.interp(t,t_interp, y_interp) # t: The x-coordinates at which to evaluate the interpolated values.
+                                                   # t_interp: The x-coordinates of the data points
+                                                   # y_interp: The y-coordinates of the data points
+
+        return setpoint_function
+
+    sp1 = create_setpoint_function(sp_profile)
+    sp1(200)
+    return create_setpoint_function, sp1
+
+
+@app.cell
+def _(sp):
+    t = 100
+    print(f"At time = {t:3d}, setpoint = {sp(t)}")
+    return
+
+
+@app.cell
+def _(create_setpoint_function, np, plt, sp1, sp_profile):
+    # compute setpoint values
+    t_ = np.linspace(0,600,600)
+
+    sp_profile.loc[5:6,"SP"] = [95, 95]
+    sp2 = create_setpoint_function(sp_profile)
+    y = sp2(t_)
+
+    fix, ax_ = plt.subplots(1,1,figsize=(10,5))
+    ax_.plot(t_,sp1(t_))
+    ax_.plot(t_,sp2(t_))
+    ax_.set_label("Time / seconds")
+    ax_.set_title("setpoint function")
+    ax_.grid(True)
+    plt.show()
+
+    return
+
+
+@app.cell
+def _(create_setpoint_function, np, plt):
+    T_amb = 21.0
+
+    sp_1 = create_setpoint_function([[0, T_amb], [20, T_amb], [60, 50], [100, 50], [140, T_amb]])
+    sp_2 = create_setpoint_function([[0, T_amb], [0, 45], [120, 35], [200, T_amb]])
+
+    # create plot axes
+    fig, _ax = plt.subplots(2, 1)
+
+    # plot setpoint functions
+    _t = np.linspace(-1, 250, 250)
+    _ax[0].plot(_t, sp_1(_t))
+    _ax[1].plot(_t, sp_2(_t))
     return
 
 
