@@ -60,7 +60,15 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ### Example TCLab
+    ### Numeric simulation
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    #### State space et lsim
     """)
     return
 
@@ -113,9 +121,11 @@ def _(mo):
     return
 
 
-@app.cell
-def _(B):
-    B
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    #### Histeresis relay control avec changement du SP
+    """)
     return
 
 
@@ -165,53 +175,6 @@ def _(A, B, C, D, T_amb, np, plt):
     plt.xlabel('Time / seconds')
     plt.ylabel('Power / %')
     plt.show()
-    return cont2discrete, n, t_sample
-
-
-@app.cell
-def _(A, B, C, D, T_amb, cont2discrete, n, np, plt, t_sample):
-    #SP = 40
-    _d = 3 # Deadband °C
-
-    _x = np.zeros((n,2))
-    _y = np.zeros(n)
-    _u = np.zeros(n)
-    SP = np.zeros(n)
-    SP[:299] = 40
-    SP[300:] = 50
-    print(SP)
-
-    Qmax = 70
-    Qmin = 0
-
-    Ad, Bd, Cd, Dd, dt = cont2discrete((A,B,C,D), dt=1, method='zoh')
-
-    for i in range(1,len(t_sample)):
-        if _y[i-1] <= (SP[i-1] - T_amb) - _d:
-            _u[i] = Qmax
-        elif _y[i-1] >= (SP[i-1] - T_amb) + _d:
-            _u[i] = Qmin
-        else:
-            _u[i] = _u[i-1]
-
-        # Update the state
-        _x[i,:] = Ad @ _x[i-1] + Bd.T * _u[i]
-        _y[i] = (Cd @ _x[i] + Dd.T * _u[i])[0,0]
-
-    plt.plot(t_sample, _y + T_amb)
-    plt.xlabel('Time / seconds')
-    plt.ylabel('Temperature / °C')
-    plt.show()
-
-    plt.plot(t_sample, _u)
-    plt.xlabel('Time / seconds')
-    plt.ylabel('Power / %')
-    plt.show()
-    return
-
-
-@app.cell
-def _():
     return
 
 

@@ -22,8 +22,8 @@ def Relay(MV_min=0, MV_max=100, d=0):
         SP, PV = yield MV
         if PV <= SP - d:
             MV = MV_max
-            if PV >= SP + d:
-                MV = MV_min
+        if PV >= SP + d:
+            MV = MV_min
 
 
 @app.cell

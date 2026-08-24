@@ -8,14 +8,19 @@
     {
       "id": "Hbol",
       "code_hash": "0279973f8909053f83adc66d134358e1",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<pre class='text-xs'>array([[900,  95],\n       [ 20,  94],\n       [ 20,  60],\n       [ 30,  72],\n       [ 20,  94],\n       [ 20,  60],\n       [ 30,  72],\n       [ 20,  94],\n       [ 20,  60],\n       [ 30,  72],\n       [ 20,  94],\n       [ 20,  60],\n       [ 30,  72],\n       [ 20,  94],\n       [ 20,  60],\n       [ 30,  72],\n       [600,  72],\n       [  0,  30]])</pre>"
-          }
-        }
-      ],
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "68c0e41e44ee484a58a2d2e28bd218fa",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": null,
+      "outputs": [],
       "console": []
     }
   ]

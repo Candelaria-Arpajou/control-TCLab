@@ -4,6 +4,20 @@ __generated_with = "0.23.0"
 app = marimo.App(width="medium")
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    A step change is an discontinuous change in setpoint value occuring as specified point in time. An example is specifying a setpoint change from 45 deg C to 65 deg C at a specified point in time.
+
+    A **soak** (or **dwell**) is a specified period of time over which the setpoint is held a constant, specified value.
+
+    A **ramp** is a specified period of time over which the setpoint changes at a constant rate from a specified starting value to a specified final value.
+
+    The **ramp** rate is the rate of change in a setpoint ramp. These may have positive or negative values.
+    """)
+    return
+
+
 @app.cell
 def _():
     import marimo as mo
@@ -120,7 +134,6 @@ def _(create_setpoint_function, np, plt, sp1, sp_profile):
     ax_.set_title("setpoint function")
     ax_.grid(True)
     plt.show()
-
     return
 
 
